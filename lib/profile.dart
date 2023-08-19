@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import "package:shared_preferences/shared_preferences.dart";
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -15,23 +16,31 @@ class _ProfilePageState extends State<ProfilePage> {
 
   var _genders = ['Female', 'Male'];
   String? _gender;
-
   @override
   void initState() {
     super.initState();
-    getInfo();
+    _loadData();
   }
 
-  getInfo() async {
-    // getUserInfo().then((info) {
-    //   // print(info);
-    //   setState(() {
-    //     _gender = info!['gender'];
-    //     _weightController.text = info!['weight'];
-    //     _ageController.text = info!['age'];
-    //     _heightController.text = info!['height'];
-    //   });
-    // });
+  void _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Load and set the saved values if they are not null
+    setState(() {
+      _ageController.text = prefs.getString('age') ?? '';
+      _heightController.text = prefs.getString('height') ?? '';
+      _weightController.text = prefs.getString('weight') ?? '';
+      print(
+          prefs.getString('gender'));
+      if (prefs.containsKey('gender')) {
+        _gender = prefs.getString('gender')!;
+      }
+    });
+  }
+
+  Future<void> _saveData(String key, String? value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(key, value ?? '');
   }
 
   updateInfo() {
@@ -40,19 +49,13 @@ class _ProfilePageState extends State<ProfilePage> {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+    _saveData("gender", _gender);
+    _saveData("age", _ageController.text.trim());
+    _saveData("height", _heightController.text.trim());
+    _saveData("weight", _weightController.text.trim());
 
-    Map<String, dynamic> userInfo = {
-      'height': _heightController.text.trim(),
-      'weight': _weightController.text.trim(),
-      'age': _ageController.text.trim(),
-      'gender': _gender
-    };
-
-    buildLoading();
-    // editUserInfo(userInfo).then((value) {
-    //   Navigator.of(context).pop();
-    //   snapBarBuilder('User info edited');
-    // });
+    // buildLoading();
+    snapBarBuilder('User info edited');
   }
 
   buildLoading() {
