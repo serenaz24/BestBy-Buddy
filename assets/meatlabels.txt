@@ -1,0 +1,3 @@
+0 fresh
+1 half fresh
+2 spoiled

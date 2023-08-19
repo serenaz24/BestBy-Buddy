@@ -1,0 +1,6 @@
+fresh-ripe
+fresh-unripe
+overripe
+ripe
+rotten
+unripe
