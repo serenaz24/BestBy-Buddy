@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:shared_preferences/shared_preferences.dart";
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class Profile1Page extends StatefulWidget {
+  const Profile1Page({Key? key}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<Profile1Page> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<Profile1Page> {
   final _weightController = TextEditingController();
   final _heightController = TextEditingController();
   final _ageController = TextEditingController();
@@ -30,8 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
       _ageController.text = prefs.getString('age') ?? '';
       _heightController.text = prefs.getString('height') ?? '';
       _weightController.text = prefs.getString('weight') ?? '';
-      print(
-          prefs.getString('gender'));
+      print(prefs.getString('gender'));
       if (prefs.containsKey('gender')) {
         _gender = prefs.getString('gender')!;
       }
@@ -58,19 +56,6 @@ class _ProfilePageState extends State<ProfilePage> {
     snapBarBuilder('User info edited');
   }
 
-  buildLoading() {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
-          );
-        });
-  }
-
   snapBarBuilder(String message) {
     final snackBar = SnackBar(
       content: Text(message),
@@ -87,6 +72,19 @@ class _ProfilePageState extends State<ProfilePage> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+          title: Padding(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 10.0),
+              child: Text(
+                "My Account",
+                style: TextStyle(
+                    color: Color(0xFF76A737),
+                    fontWeight: FontWeight.w300,
+                    fontSize: 27.0),
+              )),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0),
       body: WillPopScope(
         onWillPop: () async {
           Navigator.pop(
@@ -98,82 +96,69 @@ class _ProfilePageState extends State<ProfilePage> {
           child: ListView(
             children: <Widget>[
               Container(
-                  color: const Color.fromRGBO(227, 219, 218, 1.0),
-                  height: height * .12,
-                  child: Image.asset('images/logo.png', fit: BoxFit.fitHeight)),
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 12.0, right: 12, top: 20),
                   child: Column(
-                    children: [
-                      const Text(
-                        "Profile",
-                        style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(220, 166, 129, 1.0)),
-                      ),
-                      Container(
-                        height: 3,
-                        color: const Color.fromRGBO(80, 80, 74, 1.0),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 4,
-                          decoration: InputDecoration(
-                              counterText: '',
-                              labelText: 'Height',
-                              hintText: "5.05",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          controller: _heightController,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 3,
-                          decoration: InputDecoration(
-                              label: const Text('Weight (lb)'),
-                              hintText: "140",
-                              counterText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          controller: _weightController,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          maxLength: 3,
-                          decoration: InputDecoration(
-                              label: const Text('Age'),
-                              hintText: "Age",
-                              counterText: '',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20))),
-                          controller: _ageController,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: createRoundedDropDown(width),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: ElevatedButton(
-                            onPressed: updateInfo,
-                            child: Text('Update User Info'),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromRGBO(220, 166, 129, 1.0))),
-                      )
-                    ],
-                  )),
+                children: [
+                  Container(
+                    height: 3,
+                    color: const Color.fromRGBO(80, 80, 74, 1.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      maxLength: 4,
+                      decoration: InputDecoration(
+                          counterText: '',
+                          labelText: 'Height',
+                          hintText: "5.05",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      controller: _heightController,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      maxLength: 3,
+                      decoration: InputDecoration(
+                          label: const Text('Weight (lb)'),
+                          hintText: "140",
+                          counterText: '',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      controller: _weightController,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      maxLength: 3,
+                      decoration: InputDecoration(
+                          label: const Text('Age'),
+                          hintText: "Age",
+                          counterText: '',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      controller: _ageController,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: createRoundedDropDown(width),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: ElevatedButton(
+                        onPressed: updateInfo,
+                        child: Text('Update User Info'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Color.fromRGBO(220, 166, 129, 1.0))),
+                  )
+                ],
+              )),
             ],
           ),
         ),

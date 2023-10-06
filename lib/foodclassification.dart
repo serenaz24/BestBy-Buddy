@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dictionary.dart';
 import 'package:tflite/tflite.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:food_project/meatclassification.dart';
 import 'food_info.dart';
 import 'package:food_project/bananaclassification.dart';
 
@@ -29,7 +31,7 @@ class _FoodClassificationState extends State<Food_Classification> {
   final picker = ImagePicker();
 
   FoodInfo? foodInfo;
-  
+
   FoodInfo? getCorrespondingFood(List<dynamic> l){
     String classification = l[0]["label"];
     try {
@@ -38,7 +40,7 @@ class _FoodClassificationState extends State<Food_Classification> {
       return FoodInfo("Null", "Null", "Null");
     }
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -58,9 +60,11 @@ class _FoodClassificationState extends State<Food_Classification> {
   }
 
   void processImage(PickedFile i) {
-    _imageFile = i;
-    _image = File(i!.path);
-    _imageWidget = Image.file(_image!);
+    setState(() {
+      _imageFile = i;
+      _image = File(i!.path);
+      _imageWidget = Image.file(_image!);
+    });
   }
 
   void _imageSelection() async {
@@ -69,6 +73,7 @@ class _FoodClassificationState extends State<Food_Classification> {
       if (value != null)
       {
         _imageClassification(value!);
+        uploadFileToFBStorage(_image!);
       }
     });
   }
@@ -79,6 +84,7 @@ class _FoodClassificationState extends State<Food_Classification> {
       if (value != null)
         {
           _imageClassification(value!);
+          uploadFileToFBStorage(_image!);
         }
     });
   }
@@ -109,31 +115,78 @@ class _FoodClassificationState extends State<Food_Classification> {
     super.dispose();
   }
 
+  void uploadFileToFBStorage (File file) {
+    var fileName = DateTime.now().millisecondsSinceEpoch.toString() + ".jpg";
+    FirebaseStorage.instance.ref().child("images/" + fileName).putFile(file)
+    .then((res) {
+      print("successfully uploaded image");
+    }).catchError((error) {
+      print("failed to upload image");
+      print(error);
+    }
+    );
+  }
+
+  get_date(exp_date) {
+    var today = DateTime.now();
+    if(exp_date!.contains("day")) {
+    String? refrigerator = exp_date?.split("day")[0];
+    String? refrigerator2 = refrigerator?.split("about")[1];
+    today = today.add(Duration(days: int.parse(refrigerator2!)));
+    }
+    else if (exp_date!.contains("week")) {
+    String? refrigerator = exp_date?.split("week")[0];
+    String? refrigerator2 = refrigerator?.split("about")[1];
+    today = today.add(Duration(days: int.parse(refrigerator2!) * 7));
+    }
+    else if (exp_date!.contains("month")) {
+    String? refrigerator = exp_date?.split("month")[0];
+    String? refrigerator2 = refrigerator?.split("about")[1];
+    today = today.add(Duration(days: int.parse(refrigerator2!) * 30));
+    }
+    return today;
+  }
+
+
+
+  final user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
+    final CollectionReference _inventory = FirebaseFirestore.instance.collection(user.email!);
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-            title: Text(
+          leading: Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: BackButton(color: Color(0xFF6B9D2F))
+          ),
+          title: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Text(
                 "Produce Classification",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 30.0),
-            ),
-        backgroundColor: Color(0xFF4E841A),
-      ),
+                style: TextStyle(
+                    color: Color(0xFF76A737),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 27.0),
+              )),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0),
       body: Center(
         child: Column(
           children: [ if(_image == null)
              Container(
                 margin: EdgeInsets.all(20.0),
-                color: Color(0xFF91BA5A),
                 child:
-                TextButton(
+                ElevatedButton(
                     onPressed: () {},
                     child: Text(
                       "Take a picture of a produce",
                       style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.w400),
                     ),
                     style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                       padding: EdgeInsets.all(20.0),
                       fixedSize: Size(400, 80),
                     )
@@ -156,7 +209,7 @@ class _FoodClassificationState extends State<Food_Classification> {
                   : Text("")
             ),
             _listResult != null
-                    ? Container(height: 535,
+                    ? Container(height: 605,
                       child: ListView(children: [
                         Container(
                           margin: EdgeInsets.only(top: 15, left: 20, right: 20),
@@ -216,12 +269,11 @@ class _FoodClassificationState extends State<Food_Classification> {
         ),
       ),
 
-
         floatingActionButton: Stack(
             fit: StackFit.expand,
             children: [if (_listResult != null)
               Positioned(
-                bottom: -10,
+                bottom: -14,
                 right: 130,
                   child: Row(
                     children: [SizedBox(
@@ -235,23 +287,149 @@ class _FoodClassificationState extends State<Food_Classification> {
                                     MaterialPageRoute(builder: (context) => const Banana_Classification()),
                                   );
                                 }, child: Text("Analyze Banana",
-                                style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.w400)),
+                                style: TextStyle(color: Colors.white, fontSize: 22.0, fontWeight: FontWeight.w400)),
                                 style: ElevatedButton.styleFrom(
                                     padding: EdgeInsets.all(10.0),
-                                    fixedSize: Size(200, 55))
+                                    fixedSize: Size(200, 55),
+                                    backgroundColor: Color(0xFF619427),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50)))
                             ))
                           : Text("")
                   )
               ])),
               Positioned(
-                bottom: 3,
+                bottom: -14,
+                right: 125,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_listResult != null && _listResult![0]["label"] != "1 banana")
+                      SizedBox(
+                          child: Container(
+                              margin: EdgeInsets.all(15),
+                              child: ElevatedButton(
+                                onPressed: () async{
+                                  showDialog(context: context,
+                                    builder: (context) => SimpleDialog(
+                                      backgroundColor: Color(0xFFFAF8EE),
+                                      contentPadding: const EdgeInsets.only(
+                                          top: 15, bottom: 20, left: 30, right: 30),
+                                      title: const Text("Add to Inventory",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              color: Color(0xFF4E841A),
+                                              fontWeight: FontWeight.w500)),
+                                      children: [
+                                        Container(
+                                          child: Text(
+                                              "How will you be storing your produce?",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                              )
+                                          ),
+                                          padding: EdgeInsets.only(bottom: 15),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50.0),
+                                              color: Color(0xFF76A737)
+                                          ),
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: TextButton(onPressed: () async {
+                                            var desc = foodInfo?.description.split(":");
+                                            var room_temp = desc?[1].split("Ref");
+                                            String? roomtemp = room_temp?[0];
+                                            var exp = get_date(roomtemp);
+                                            final today = DateTime(2023, 9, 20);
+                                            final difference = today.difference(exp);
+                                            String expdate = exp.month.toString()+"/"+exp.day.toString()+"/"+exp.year.toString().substring(2,4);
+                                            await _inventory.add({"food name": foodInfo!.name, "expiration date": expdate, "order": int.parse(difference.inDays.toString())});
+                                            Navigator.of(context).pop();
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor: Color(0xFF619427),
+                                                    behavior: SnackBarBehavior.fixed,
+                                                    duration: Duration(milliseconds: 1500),
+                                                    // shape: StadiumBorder(),
+                                                    content: Text('Successfully added food item',
+                                                        style: TextStyle(color: Colors.white,
+                                                            fontSize: 18,
+                                                            fontFamily: "Mona Sans"))));
+                                          }, child: const Text("Room Temperature",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20
+                                              ))
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50.0),
+                                              color: Color(0xFF76A737)
+                                          ),
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          child: TextButton(onPressed: () async {
+                                            var desc = foodInfo?.description.split(":");
+                                            String? refrig = desc?[2];
+                                            var exp = get_date(refrig);
+                                            final today = DateTime(2023, 9, 20);
+                                            final difference = today.difference(exp);
+                                            print(difference.inDays);
+                                            String expdate = exp.month.toString()+"/"+exp.day.toString()+"/"+exp.year.toString().substring(2,4);
+                                            await _inventory.add({"food name": foodInfo!.name, "expiration date": expdate, "order": int.parse(difference.inDays.toString())});
+
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor: Color(0xFF619427),
+                                                    behavior: SnackBarBehavior.fixed,
+                                                    duration: Duration(milliseconds: 1500),
+                                                    // shape: StadiumBorder(),
+                                                    content: Text('Successfully added food item',
+                                                        style: TextStyle(color: Colors.white,
+                                                            fontSize: 18,
+                                                            fontFamily: "Mona Sans"))));
+
+                                            Navigator.of(context).pop();
+                                          }, child: const Text("Refrigerator",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20
+                                              ))
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+
+
+                                }, child: Text("Add to Inventory",
+                                  style: TextStyle(color: Colors.white, fontSize: 21.0, fontWeight: FontWeight.w400)),
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(15.0),
+                                    fixedSize: Size(200, 55),
+                                    backgroundColor: Color(0xFF619427),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50))),
+                              ))
+                      ),
+                  ]
+                ),
+              ),
+
+              Positioned(
+                bottom: 0,
                 right: 0,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children:[
                     FloatingActionButton(
                         heroTag: null,
                         onPressed: _imageSelection,
-                        child: Icon(Icons.add, color: Colors.white)
+                        child: Icon(Icons.add, color: Colors.white),
+                        backgroundColor: Color(0xFF619427)
                     ),
                     SizedBox(
                       width: 10
@@ -259,43 +437,14 @@ class _FoodClassificationState extends State<Food_Classification> {
                     FloatingActionButton(
                         heroTag: null,
                         onPressed: _cameraSelection,
-                        child: Icon(
-                            Icons.add_a_photo_rounded, color: Colors.white)
+                        child: Icon(Icons.add_a_photo_rounded, color: Colors.white),
+                        backgroundColor: Color(0xFF619427),
                     ),
                   ],
                 ),
               ),
             ]
         ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 1,
-          iconSize: 30,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Color(0xFF619427),
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white60,
-          items: [
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.home_rounded)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.camera_alt)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.list_alt)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.person)
-            )
-          ]
-      ),
-
     );
   }
 }

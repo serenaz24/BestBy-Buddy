@@ -4,6 +4,7 @@ import 'package:tflite/tflite.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'food_info.dart';
+import 'home.dart';
 
 //The following code is based heavily off of code provided by:
 //  -Teresa Wu https://spltech.co.uk/flutter-image-classification-using-tensorflow-in-4-steps/
@@ -111,27 +112,37 @@ class _MeatClassificationState extends State<Meat_Classification> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-            "Meat Classification",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 30.0),
-        ),
-        backgroundColor: Color(0xFF4E841A),
-      ),
+          leading: Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: BackButton(color: Color(0xFF6B9D2F))
+          ),
+          title: Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Text(
+                "Meat Classification",
+                style: TextStyle(
+                    color: Color(0xFF76A737),
+                    fontWeight: FontWeight.w300,
+                    fontSize: 27.0),
+              )),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0),
       body: Center(
         child: Column(
           children: [ if(_image == null)
             Container(
                 margin: EdgeInsets.all(20.0),
-                color: Color(0xFF91BA5A),
                 child:
-                TextButton(
+                ElevatedButton(
                     onPressed: () {},
                     child: Text(
                       "Take a picture of a meat",
                       style: TextStyle(color: Colors.white, fontSize: 25.0, fontWeight: FontWeight.w400),
                     ),
                     style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
                       padding: EdgeInsets.all(20.0),
                       fixedSize: Size(400, 80),
                     )
@@ -154,7 +165,7 @@ class _MeatClassificationState extends State<Meat_Classification> {
                   : Text("")
             ),
             _listResult != null
-                ? Container(height: 590,
+                ? Container(height: 600,
                   child: ListView(children: [
                     Container(
                       margin: EdgeInsets.only(top: 15, left: 20, right: 20),
@@ -198,59 +209,48 @@ class _MeatClassificationState extends State<Meat_Classification> {
           ],
         ),
       ),
+
       floatingActionButton: Stack(
           fit: StackFit.expand,
           children: [
             Positioned(
-              bottom: 3,
+              bottom: 0,
               right: 0,
               child: Row(
-                children:[
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:[if (_listResult != null)
+                    SizedBox(
+                        child: Container(
+                            margin: EdgeInsets.all(15),
+                            child: ElevatedButton(
+                                onPressed: () {
+
+                                }, child: Text("Add to Inventory",
+                                style: TextStyle(color: Colors.white, fontSize: 23.0, fontWeight: FontWeight.w400)),
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(10.0),
+                                    fixedSize: Size(200, 55),
+                                    backgroundColor: Color(0xFF619427))
+                            ))
+                    ),
                   FloatingActionButton(
-                      heroTag: null,
-                      onPressed: _imageSelection,
-                      child: Icon(Icons.add, color: Colors.white)
+                    heroTag: null,
+                    onPressed: _imageSelection,
+                    child: Icon(Icons.add, color: Colors.white),
+                    backgroundColor: Color(0xFF619427),
                   ),
                   SizedBox(
-                      width: 10
+                      width: 7
                   ),
                   FloatingActionButton(
-                      heroTag: null,
-                      onPressed: _cameraSelection,
-                      child: Icon(
-                          Icons.add_a_photo_rounded, color: Colors.white)
+                    heroTag: null,
+                    onPressed: _cameraSelection,
+                    child: Icon(Icons.add_a_photo_rounded, color: Colors.white),
+                    backgroundColor: Color(0xFF619427),
                   ),
                 ],
               ),
             ),
-          ]
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 1,
-          iconSize: 30,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Color(0xFF619427),
-          showUnselectedLabels: false,
-          showSelectedLabels: false,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white60,
-          items: [
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.home_rounded)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.camera_alt)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.list_alt)
-            ),
-            BottomNavigationBarItem(
-                label: "",
-                icon: Icon(Icons.person)
-            )
           ]
       ),
     );

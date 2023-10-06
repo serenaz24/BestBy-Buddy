@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_project/foodclassification.dart';
 import 'package:food_project/meatclassification.dart';
 import 'package:food_project/bananaclassification.dart';
-import 'package:food_project/classification.dart';
 
 class Home_Page extends StatefulWidget {
   const Home_Page({super.key});
@@ -17,73 +17,95 @@ class _HomePageState extends State<Home_Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+          title: Padding(
+            padding: const EdgeInsets.only(top: 15.0),
+            child: Text(
             "app name",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 30.0),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xFF4E841A),
-      ),
+            style: TextStyle(
+                color: Color(0xFF76A737),
+                fontWeight: FontWeight.w300,
+                fontSize: 27.0),
+          )),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0),
       body: Center(
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(20.0),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Food_Classification()),
-                    );
-                  },
-                  child: Text(
-                    "Produce Classification",
-                    style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w400),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(20.0),
-                    fixedSize: Size(300, 80),
-                    )
-                )
-              ),
-            Container(
-              margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Meat_Classification()),
-                    );
-                  },
-                  child: Text(
-                      "Meat Classification",
-                    style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w400),
-                  ),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(20.0),
-                  fixedSize: Size(300, 80),
-                  )
-              )
-            ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Food_Classification()),
+                      );
+                    },
+                    child: Text(
+                      "Produce Classification",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.w300),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
+                      padding: EdgeInsets.all(20.0),
+                      backgroundColor: Color(0xFF619427),
+                      fixedSize: Size(330, 90),
+                    ))),
             Container(
                 margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                 child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Banana_Classification()),
+                        MaterialPageRoute(
+                            builder: (context) => const Meat_Classification()),
                       );
                     },
                     child: Text(
-                      "Banana Analysis",
-                      style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w400),
+                      "Meat Classification",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.w400),
                     ),
                     style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
                       padding: EdgeInsets.all(20.0),
-                      fixedSize: Size(300, 80),
-                    )
-                )
-            )
+                        backgroundColor: Color(0xFF619427),
+                      fixedSize: Size(330, 90),
+                    ))),
+            Container(
+                margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const Banana_Classification()),
+                      );
+                    },
+                    child: Text(
+                      "Banana Analysis ",
+                       textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      padding: EdgeInsets.all(20.0),
+                      backgroundColor: Color(0xFF619427),
+                      fixedSize: Size(330, 90),
+                    )))
           ], // children
         ),
       ),

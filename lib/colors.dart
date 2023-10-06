@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const MaterialColor primary = MaterialColor(_primaryPrimaryValue, <int, Color>{
-  50: Color(0xFFF0F5E8),
+  50:  Color(0xFFFAF8EE),
   100: Color(0xFFD8E7C5),
   200: Color(0xFFBFD79E),
   300: Color(0xFFA5C677),
