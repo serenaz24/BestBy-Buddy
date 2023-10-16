@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_project/classification.dart';
 import 'package:food_project/inventorypage.dart';
-import 'package:food_project/profile.dart';
 import 'package:food_project/profilepage.dart';
 import 'homepage.dart';
 

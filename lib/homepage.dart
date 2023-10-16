@@ -20,7 +20,7 @@ class _HomePageState extends State<Home_Page> {
           title: Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: Text(
-            "app name",
+            "BestBy Buddy",
             style: TextStyle(
                 color: Color(0xFF76A737),
                 fontWeight: FontWeight.w300,
