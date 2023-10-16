@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "344699193458",
+    "project_id": "food-app-47bd5",
+    "storage_bucket": "food-app-47bd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344699193458:android:38d6b5b8b1a40a90895aeb",
+        "android_client_info": {
+          "package_name": "com.serena.food_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344699193458-tmvmgp58vpqpdlp5rre6lbabs8k0jjga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2e2NEoXUDoO3hPvqQtjNWb53nPPu4PvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344699193458-tmvmgp58vpqpdlp5rre6lbabs8k0jjga.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "344699193458-nb6cdbidet5dvbq7koo62bei54lnshha.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.annie.foodProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
