@@ -78,30 +78,22 @@ class _Inventory_PageState extends State<Inventory_Page> {
           builder: (BuildContext context) {
             return Padding(
               padding: EdgeInsets.only(
-                  top: 20,
-                  left: 20,
-                  right: 20,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+                  top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
                     controller: _foodNameController,
                     decoration: const InputDecoration(
                         labelText: 'Food Name',
-                        labelStyle: TextStyle(fontSize: 20, color: Color(0xFF4E841A))),
-                  ),
+                        labelStyle: TextStyle(fontSize: 20, color: Color(0xFF4E841A)))),
                   TextField(
-                    keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: _expDateController,
                     decoration: const InputDecoration(
                         labelText: 'Expiration Date',
                         labelStyle: TextStyle(fontSize: 20, color: Color(0xFF4E841A)),
-                        hintText: 'MM/DD/YY'
-                    ),
-                  ),
+                        hintText: 'MM/DD/YY')),
                   const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
