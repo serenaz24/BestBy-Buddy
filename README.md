@@ -1,2 +1,2 @@
-# Nutritional Project
+# Food inventory tracking app
  
