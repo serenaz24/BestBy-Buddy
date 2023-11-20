@@ -88,7 +88,7 @@ class _Inventory_PageState extends State<Inventory_Page> {
                         labelText: 'Food Name',
                         labelStyle: TextStyle(fontSize: 20, color: Color(0xFF4E841A)))),
                   TextField(
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    // keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: _expDateController,
                     decoration: const InputDecoration(
                         labelText: 'Expiration Date',
@@ -158,8 +158,7 @@ class _Inventory_PageState extends State<Inventory_Page> {
                         labelStyle: TextStyle(fontSize: 20, color: Color(0xFF4E841A))),
                   ),
                   TextField(
-                    keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                    // keyboardType: const TextInputType.numberWithOptions(decimal: false),
                     controller: _expDateController,
                     decoration: const InputDecoration(
                         hintText: 'MM/DD/YY',

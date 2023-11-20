@@ -218,29 +218,15 @@ class _MeatClassificationState extends State<Meat_Classification> {
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children:[if (_listResult != null)
-                    SizedBox(
-                        child: Container(
-                            margin: EdgeInsets.all(15),
-                            child: ElevatedButton(
-                                onPressed: () {
-
-                                }, child: Text("Add to Inventory",
-                                style: TextStyle(color: Colors.white, fontSize: 23.0, fontWeight: FontWeight.w400)),
-                                style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.all(10.0),
-                                    fixedSize: Size(200, 55),
-                                    backgroundColor: Color(0xFF619427))
-                            ))
-                    ),
+                children:[
                   FloatingActionButton(
-                    heroTag: null,
-                    onPressed: _imageSelection,
-                    child: Icon(Icons.add, color: Colors.white),
-                    backgroundColor: Color(0xFF619427),
+                      heroTag: null,
+                      onPressed: _imageSelection,
+                      child: Icon(Icons.add, color: Colors.white),
+                      backgroundColor: Color(0xFF619427)
                   ),
                   SizedBox(
-                      width: 7
+                      width: 10
                   ),
                   FloatingActionButton(
                     heroTag: null,
